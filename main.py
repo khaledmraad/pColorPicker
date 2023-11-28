@@ -1,10 +1,13 @@
 import tkinter as tk
 from tkinter import colorchooser
 
+import pyautogui as pg
+
 def pick_color():
     color = colorchooser.askcolor()[1]  
     if color:
         color_label.config(foreground=color)  
+        
 
 window = tk.Tk()
 window.title("Python Color Picker")
