@@ -1,22 +1,45 @@
-import tkinter as tk
-from tkinter import colorchooser
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QFileDialog
+import sys
 
-import pyautogui as pg
+class MainApp(QMainWindow):
+    def __init__(self, app):
+        super().__init__()
+        self.setWindowTitle("Drag and Drop")
+        self.resize(720, 480)
+        self.setAcceptDrops(True)
 
-def pick_color():
-    color = colorchooser.askcolor()[1]  
-    if color:
-        color_label.config(foreground=color)  
+        # create a QPushButton instance and set the text
+        self.button = QPushButton("Select File", app)
+
+        # set the size and position of the button
+        self.button.setGeometry(10, 10, 100, 30)
+
+        # set the callback function for the button click event
+        self.button.clicked.connect(self.select_file)
         
 
-window = tk.Tk()
-window.title("Python Color Picker")
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            event.ignore()
 
-color_label = tk.Label(window, text="this is your color", font=("Helvetica", 18))
-color_label.pack(pady=20)
+    def dropEvent(self, event):
+        files = [u.toLocalFile() for u in event.mimeData().urls()]
+        for f in files:
+            print(f)
 
-color_picker = tk.Button(window, text="Pick a Color", command=pick_color)
-color_picker.pack()
+    # define the callback function
+    def select_file(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_name, _ = QFileDialog.getOpenFileName(None, "Select File", "", "All Files (*);;Python Files (*.py)", options=options)
+        if file_name:
+            print("Selected file:", file_name)
 
 
-window.mainloop()
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ui = MainApp(app)
+    ui.show()
+    sys.exit(app.exec_())
