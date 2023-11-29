@@ -4,7 +4,7 @@ import sys
 class MainApp(QMainWindow):
     def __init__(self, app):
         super().__init__()
-        self.setWindowTitle("Drag and Drop")
+        segit lf.setWindowTitle("Drag and Drop")
         self.resize(720, 480)
         self.setAcceptDrops(True)
 
